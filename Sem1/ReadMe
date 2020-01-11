@@ -1,0 +1,21 @@
+There are 4 subjects. Details are given below - 
+
++-------------+-------------------------------------+------------+-------+
+| Course No.  |            Course Title             | Short form | Units |
++-------------+-------------------------------------+------------+-------+
+| SSZG514     | Object Oriented Analysis & Design   | OOAD       |     4 |
+| SSZG518     | Database Design & Applications      | DDA        |     5 |
+| SSZG519     | Data Structures & Algorithms Design | DSAD       |     5 |
+| SSZG653     | Software Architectures              | SWA         |     5 |
++-------------+-------------------------------------+------------+-------+
+
+Course handouts can be found here.
+As and when required, I will upload the documents related to Semeter-1 (January2020-June2020).
+
+Subject Name = OOAD/DDA/DSAD/SWA
+HW = Homework
+QZ = Quiz
+AS = Assignment
+Prog = Programming
+Dt	= Date
+Naming convension - <SubjectName><HW/QZ/AS><Dt>
