@@ -1,0 +1,9 @@
+Object Oriented Analysis & Design
+
+Database Design & Applications
+DBMS_RL_1.1: https://www.youtube.com/watch?v=uHFoxX0-8k4#action=share
+
+Data Structures & Algorithms Design
+DSA_RL_1.1: https://www.youtube.com/watch?v=qA41Q1kPhgo&feature=youtu.be
+
+Software Architectures
