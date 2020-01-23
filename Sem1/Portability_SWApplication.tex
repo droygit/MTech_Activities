@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+
+\title{Portability quality attribute for SW Application}
+\author{Debojyoti Roy (email: 2019ht13192@wilp.bits-pilani.ac.in)}
+\date{January 23, 2020}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Definition}
+The capability of software application to be transferred from one environment to another.
+
+\section{Tactics}
+The techniques for achieving portable software are -
+\begin{enumerate}
+  \item Identify system dependencies
+  \item Isolate system dependencies
+  \item Handle those dependencies separately
+  \item Keep system independent codes in one package
+  \item Use container platforms - like docker, Kubernetes
+\end{enumerate}
+
+\section{Use case}
+\textbf{How to improve Portability when one application requires to run in multiple operating system?}
+\\* 
+\\* Below items can help to achieve the goal -
+\begin{enumerate}
+  \item Identify all OS specific implementations. Example - system calls, read files form specific locations, etc.
+  \item If that application was initially written for Ubuntu system, then SW developers need to add one module, which can identify the operating system. Then depending on the operating system, it can change system calls or consult different files for different OS.
+  \item Package all files and create an installer. Reduce dependencies on system calls.
+  \item Compile the application using cross-compilers.
+  \item If possible, use Java as a language to develop the application. So, application can run in those platforms, where JVM can run. Similarly - use scripting languages. That also reduce dependencies on operating system.
+  \item Use container platforms.
+\end{enumerate}
+
+\end{document}
