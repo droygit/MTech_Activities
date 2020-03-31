@@ -244,3 +244,11 @@ select MAX(ROW_NUMBER) from (select o.User_Id, o.Order_Id, py.status, ROW_NUMBER
 select pr.Product_Id, pr.Supplier_Id, pr.Category_Id, pr.Product_Name, pr.Price, pr.Number_of_purchases, pr.Product_Specification from Products pr, Categories cr where cr.category_name = 'category1_name' and pr.Category_Id = cr.Category_Id and pr.supplier_id like 'supply_id_N';
 
 select o.User_Id, o.Order_Id, ol.Product_Id, py.Date_Time from Orders o, Order_List ol, Payments py where o.Order_Id = ol.Order_Id and o.Order_Id = py.Order_Id and  o.User_Id like 'user_id4' and py.Date_Time like '2019-11-%';
+
+
+select Product_Name from (select Product_Name, Product_id, Rating, max(rating) over (partition by Product_Name) as MAX_RATING from (select pr.product_name, pr.product_id, rw.rating 
+        from Products pr, Categories ca, Reviews rw 
+        where pr.category_id = ca.category_id and 
+            pr.product_id = rw.product_id and
+            ca.category_name = 'category__name'))
+    where Rating = Max_Rating;
