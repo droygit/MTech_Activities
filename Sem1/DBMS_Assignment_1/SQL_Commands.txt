@@ -92,12 +92,12 @@ create table Curriers (
 	Company_Website varchar(30),
 	Company_Phone_No NUMERIC(10));
 	
-Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_1', 'City1', 'Curriers_Name_1', 'email1@Curriers_Name_1.com', 'www.currier1.com', '9111111111');
-Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_2', 'City2', 'Curriers_Name_2', 'email1@Curriers_Name_2.com', 'www.currier2.com', '9222222222');
-Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_3', 'City3', 'Curriers_Name_3', 'email1@Curriers_Name_3.com', 'www.currier3.com', '9333333333');
-Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_4', 'City4', 'Curriers_Name_4', 'email1@Curriers_Name_4.com', 'www.currier4.com', '9444444444');
-Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_5', 'City5', 'Curriers_Name_5', 'email1@Curriers_Name_5.com', 'www.currier5.com', '9555555555');
-Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_6', 'City1', 'Curriers_Name_6', 'email1@Curriers_Name_6.com', 'www.currier6.com', '9666666666');
+Insert into Curriers (Currier_Id, City, Company_Name, Email, Company_Website, Company_phone_No) values ('currier_Id_1', 'City1', 'Curriers_Name_1', 'email1@Curriers_Name_1.com', 'www.currier1.com', '9111111111');
+Insert into Curriers (Currier_Id, City, Company_Name, Email, Company_Website, Company_phone_No) values ('currier_Id_2', 'City2', 'Curriers_Name_2', 'email1@Curriers_Name_2.com', 'www.currier2.com', '9222222222');
+Insert into Curriers (Currier_Id, City, Company_Name, Email, Company_Website, Company_phone_No) values ('currier_Id_3', 'City3', 'Curriers_Name_3', 'email1@Curriers_Name_3.com', 'www.currier3.com', '9333333333');
+Insert into Curriers (Currier_Id, City, Company_Name, Email, Company_Website, Company_phone_No) values ('currier_Id_4', 'City4', 'Curriers_Name_4', 'email1@Curriers_Name_4.com', 'www.currier4.com', '9444444444');
+Insert into Curriers (Currier_Id, City, Company_Name, Email, Company_Website, Company_phone_No) values ('currier_Id_5', 'City5', 'Curriers_Name_5', 'email1@Curriers_Name_5.com', 'www.currier5.com', '9555555555');
+Insert into Curriers (Currier_Id, City, Company_Name, Email, Company_Website, Company_phone_No) values ('currier_Id_6', 'City1', 'Curriers_Name_6', 'email1@Curriers_Name_6.com', 'www.currier6.com', '9666666666');
 
 select * from Curriers;
 
