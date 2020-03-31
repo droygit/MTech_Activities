@@ -1,0 +1,244 @@
+drop table Delivery;
+drop table Order_List;
+drop table Reviews;
+drop table Payments;
+drop table Products;
+drop table Orders;
+drop table Curriers;
+drop table Supplier;
+drop table Categories;
+drop table Customers;
+
+
+create table Customers (	
+	User_Id  varchar(20) primary key,
+	User_Password varchar(20),
+	Email varchar(20),
+	Fname varchar(20),
+	Lname varchar(20),
+	Address1 varchar(20),
+	Address2 varchar(20),
+	Address3 varchar(20),
+	City varchar(20),
+	State varchar(20),
+	Country varchar(20));
+
+Insert into Customers (User_Id, User_Password, Email, Fname, Lname, Address1, Address2, Address3, City, State, Country) values ('user_id1', 'password1', 'emailid1@website.com', 'FirstName1', 'LastName1', 'address11a1', 'address12a2', 'address13a3', 'City1', 'State1', 'Country1');
+Insert into Customers (User_Id, User_Password, Email, Fname, Lname, Address1, Address2, Address3, City, State, Country) values ('user_id2', 'password2', 'emailid2@website.com', 'FirstName2', 'LastName2', 'address21a1', 'address22a2', 'address23a3', 'City2', 'State2', 'Country1');
+Insert into Customers (User_Id, User_Password, Email, Fname, Lname, Address1, Address2, Address3, City, State, Country) values ('user_id3', 'password3', 'emailid3@website.com', 'FirstName3', 'LastName3', 'address31a1', 'address32a2', 'address33a3', 'City3', 'State3', 'Country1');
+Insert into Customers (User_Id, User_Password, Email, Fname, Lname, Address1, Address2, Address3, City, State, Country) values ('user_id4', 'password4', 'emailid4@website.com', 'FirstName4', 'LastName4', 'address41a1', 'address42a2', 'address43a3', 'City4', 'State1', 'Country1');
+Insert into Customers (User_Id, User_Password, Email, Fname, Lname, Address1, Address2, Address3, City, State, Country) values ('user_id5', 'password5', 'emailid5@website.com', 'FirstName5', 'LastName5', 'address51a1', 'address52a2', 'address53a3', 'City5', 'State2', 'Country1');
+
+select * from Customers;
+
+create table Categories (
+	Category_Id varchar(20) primary key,
+	Category_Name varchar(20));
+
+Insert into Categories (Category_Id, Category_Name) values ('category1', 'category1_name');
+Insert into Categories (Category_Id, Category_Name) values ('category2', 'category2_name');
+Insert into Categories (Category_Id, Category_Name) values ('category3', 'category3_name');
+Insert into Categories (Category_Id, Category_Name) values ('category4', 'category4_name');
+
+select * from Categories;
+
+create table Supplier (
+	Supplier_Id  varchar(20) primary key,
+	Company_Name varchar(30),
+	Email varchar(30),
+	Company_Website varchar(30),
+	Company_phone_No NUMERIC(10));
+
+Insert into Supplier (Supplier_Id, Company_Name, Email, Company_Website, Company_phone_No) values ('supply_id_1', 'Company_Name_1', 'email1@Company_Name_1.com', 'www.company1.com', '1111111111');
+Insert into Supplier (Supplier_Id, Company_Name, Email, Company_Website, Company_phone_No) values ('supply_id_2', 'Company_Name_2', 'email1@Company_Name_2.com', 'www.company2.com', '2222222222');
+Insert into Supplier (Supplier_Id, Company_Name, Email, Company_Website, Company_phone_No) values ('supply_id_3', 'Company_Name_3', 'email1@Company_Name_3.com', 'www.company3.com', '3333333333');
+Insert into Supplier (Supplier_Id, Company_Name, Email, Company_Website, Company_phone_No) values ('supply_id_4', 'Company_Name_4', 'email1@Company_Name_4.com', 'www.company4.com', '4444444444');
+Insert into Supplier (Supplier_Id, Company_Name, Email, Company_Website, Company_phone_No) values ('supply_id_5', 'Company_Name_5', 'email1@Company_Name_5.com', 'www.company5.com', '5555555555');
+
+select * from Supplier;
+
+create table Products (
+	Product_Id varchar(20) primary key,
+	Supplier_Id varchar(20), 
+	Category_Id varchar(20),
+	Product_Name varchar(20),
+	Price NUMERIC(10),
+	Number_of_purchases NUMERIC(10),
+	Product_Specification varchar(20),
+	Constraint fk_Product1 
+	    FOREIGN Key (Supplier_Id) REFERENCES Supplier(Supplier_Id) ON DELETE SET NULL,
+	Constraint fk_Product2
+	    FOREIGN Key (Category_Id) REFERENCES Categories(Category_Id) ON DELETE SET NULL
+);
+
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_1', 'supply_id_1', 'category2', 'Name1', 34876, 1234, 'Specification1');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_2', 'supply_id_2', 'category1', 'Name2', 3476, 876, 'Specification2');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_3', 'supply_id_3', 'category3', 'Name3', 2876, 89, 'Specification3');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_4', 'supply_id_4', 'category4', 'Name4', 12000, 12, 'Specification4');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_5', 'supply_id_1', 'category2', 'Name5', 15000, 777, 'Specification5');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_6', 'supply_id_2', 'category2', 'Name6', 2000, 678, 'Specification6');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_7', 'supply_id_3', 'category1', 'Name7', 6754, 567, 'Specification7');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_8', 'supply_id_4', 'category4', 'Name8', 896, 234, 'Specification8');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_9', 'supply_id_2', 'category4', 'Name9', 3421, 141, 'Specification9');
+Insert into Products (Product_Id, Supplier_Id, Category_Id, Product_Name, Price, Number_of_purchases, Product_Specification) values ('Product_Id_10', 'supply_id_2', 'category4', 'Name10', 7860, 112, 'Specification10');
+
+select * from Products;
+
+create table Curriers (
+	Currier_Id varchar(20) primary key,
+	Company_Name varchar(30),
+	City varchar(20),
+	Email varchar(30),
+	Company_Website varchar(30),
+	Company_Phone_No NUMERIC(10));
+	
+Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_1', 'City1', 'Curriers_Name_1', 'email1@Curriers_Name_1.com', 'www.currier1.com', '9111111111');
+Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_2', 'City2', 'Curriers_Name_2', 'email1@Curriers_Name_2.com', 'www.currier2.com', '9222222222');
+Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_3', 'City3', 'Curriers_Name_3', 'email1@Curriers_Name_3.com', 'www.currier3.com', '9333333333');
+Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_4', 'City4', 'Curriers_Name_4', 'email1@Curriers_Name_4.com', 'www.currier4.com', '9444444444');
+Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_5', 'City5', 'Curriers_Name_5', 'email1@Curriers_Name_5.com', 'www.currier5.com', '9555555555');
+Insert into Curriers (Currier_Id, Company_Name, City, Email, Company_Website, Company_phone_No) values ('currier_Id_6', 'City1', 'Curriers_Name_6', 'email1@Curriers_Name_6.com', 'www.currier6.com', '9666666666');
+
+select * from Curriers;
+
+create table Reviews (
+	User_Id varchar(20),
+	Product_Id varchar(20),
+	Date_Time varchar(20),
+	Title varchar(20),
+	Rating NUMERIC(5),
+	Advantages varchar(20),
+	Disadvantages varchar(20),
+	Other_Comments varchar(50),
+	Constraint fk_review1 
+	    FOREIGN Key (User_Id) REFERENCES Customers(User_Id) ON DELETE SET NULL,
+	Constraint fk_review2
+	    FOREIGN Key (Product_Id) REFERENCES Products(Product_Id) ON DELETE SET NULL
+);
+ I
+Insert into Reviews (User_Id, Product_Id, Date_Time, Title, Rating, Advantages, Disadvantages, Other_Comments) values ('user_id2', 'Product_Id_8', '2020-01-12 12:12:15', 'Title Product_Id_8', 5, 'Adv 1', 'Disadv 1', NULL);
+Insert into Reviews (User_Id, Product_Id, Date_Time, Title, Rating, Advantages, Disadvantages, Other_Comments) values ('user_id2', 'Product_Id_9', '2020-01-11 10:23:35', 'Title Product_Id_9', 4, 'Adv 2', 'Disadv 2', 'Other comments');
+Insert into Reviews (User_Id, Product_Id, Date_Time, Title, Rating, Advantages, Disadvantages, Other_Comments) values ('user_id1', 'Product_Id_1', '2020-02-28 21:34:46', 'Title Product_Id_1', 3, 'Adv 3', 'Disadv 3', 'Other comments');
+Insert into Reviews (User_Id, Product_Id, Date_Time, Title, Rating, Advantages, Disadvantages, Other_Comments) values ('user_id1', 'Product_Id_2', '2020-03-02 23:45:32', 'Title Product_Id_2', 2, 'Adv 4', 'Disadv 4', NULL);
+Insert into Reviews (User_Id, Product_Id, Date_Time, Title, Rating, Advantages, Disadvantages, Other_Comments) values ('user_id3', 'Product_Id_8', '2020-03-04 14:56:42', 'Title Product_Id_8', 1, 'Adv 5', 'Disadv 5', 'Other comments');
+Insert into Reviews (User_Id, Product_Id, Date_Time, Title, Rating, Advantages, Disadvantages, Other_Comments) values ('user_id2', 'Product_Id_3', '2020-03-09 15:32:51', 'Title Product_Id_3', 0, 'Adv 6', 'Disadv 6', 'Other comments');
+
+select * from Reviews;
+
+create table Orders (
+	Order_Id varchar(20) Primary Key,
+	User_Id varchar(20),
+	Total_Amount NUMERIC(10,2),
+	Constraint fk_order1 
+	    FOREIGN Key (User_Id) REFERENCES Customers(User_Id) ON DELETE SET NULL
+);
+
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_1', 'user_id2', 10000.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_2', 'user_id3', 11100.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_3', 'user_id1', 12300.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_4', 'user_id2', 2100.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_5', 'user_id4', 11000.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_6', 'user_id1', 12000.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_7', 'user_id2', 10100.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_8', 'user_id3', 10200.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_9', 'user_id2', 10010.00);
+Insert into Orders (Order_Id, User_Id, Total_Amount) values ('Order_Id_10', 'user_id2', 10020.00);
+
+select * from Orders;
+
+create table Order_List  (
+	Order_Id varchar(20),
+	Product_Id varchar(20),
+	Quantity NUMERIC(3),
+	PRIMARY KEY (Order_Id, Product_Id),
+	Constraint fk_orderlist1 
+	    FOREIGN Key (Product_Id) REFERENCES Products(Product_Id) ON DELETE SET NULL,
+	Constraint fk_orderlist2
+	    FOREIGN Key (Order_Id) REFERENCES Orders(Order_Id) ON DELETE SET NULL	
+);
+
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_1', 'Product_Id_1', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_1', 'Product_Id_10', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_1', 'Product_Id_2', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_2', 'Product_Id_3', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_2', 'Product_Id_4', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_3', 'Product_Id_5', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_4', 'Product_Id_6', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_4', 'Product_Id_7', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_4', 'Product_Id_8', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_4', 'Product_Id_9', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_5', 'Product_Id_10', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_5', 'Product_Id_1', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_6', 'Product_Id_2', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_7', 'Product_Id_3', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_8', 'Product_Id_5', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_9', 'Product_Id_6', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_8', 'Product_Id_8', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_9', 'Product_Id_10', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_8', 'Product_Id_10', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_9', 'Product_Id_10', 1);
+Insert into Order_List (Order_Id, Product_Id, Quantity) values ('Order_Id_10', 'Product_Id_1', 1);
+
+select * from Order_List;
+
+create table Payments (
+	Payment_Id varchar(20) primary key,
+	Order_Id varchar(20),
+	Date_Time varchar(20),
+	Payment NUMERIC(10,2),
+	Payment_Type varchar(20),
+	Status varchar(20),
+	Constraint fk_payment1 
+	    FOREIGN Key (Order_Id) REFERENCES Orders(Order_Id) ON DELETE SET NULL
+);
+
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_1', 'Order_Id_1', '2019-11-10 12:12:15', 10000.00, 'Credit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_2', 'Order_Id_2', '2019-11-15 12:12:15', 11100.00, 'Credit Card', 'Unsuccessful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_3', 'Order_Id_2', '2019-11-17 12:12:15', 11100.00, 'Debit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_4', 'Order_Id_3', '2019-11-18 12:12:15', 12300.00, 'Credit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_5', 'Order_Id_4', '2019-11-19 12:12:15', 2100.00, 'Debit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_6', 'Order_Id_5', '2019-11-20 12:12:15', 11000.00, 'Debit Card', 'Unsuccessful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_7', 'Order_Id_5', '2019-11-22 12:12:15', 11000.00, 'Credit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_8', 'Order_Id_6', '2019-11-28 12:12:15', 12000.00, 'Debit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_9', 'Order_Id_7', '2019-12-02 12:12:15', 10100.00, 'Credit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_10', 'Order_Id_8', '2019-12-05 12:12:15', 10200.00, 'Credit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_11', 'Order_Id_9', '2019-12-08 12:12:15', 10010.00, 'Credit Card', 'Successful');
+Insert into Payments (Payment_Id, Order_Id, Date_Time, Payment, Payment_Type, Status) values ('Payment_Id_12', 'Order_Id_10', '2019-12-12 12:12:15', 10020.00, 'Debit Card', 'Successful');
+
+select * from Payments;
+
+create table Delivery (
+	Order_Id varchar(20),
+	Currier_Id varchar(20),
+	Date_Time varchar(20),
+	PRIMARY KEY (Order_Id, Currier_Id),
+	Constraint fk_delivery1
+	    FOREIGN Key (Order_Id) REFERENCES Orders(Order_Id) ON DELETE SET NULL,
+	Constraint fk_delivery2
+	    FOREIGN Key (Currier_Id) REFERENCES Curriers(Currier_Id) ON DELETE SET NULL	
+);
+
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_1', 'currier_Id_1', '2019-11-11 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_2', 'currier_Id_2', '2019-11-18 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_3', 'currier_Id_3', '2019-11-19 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_4', 'currier_Id_4', '2019-11-21 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_5', 'currier_Id_5', '2019-11-23 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_6', 'currier_Id_6', '2019-11-30 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_7', 'currier_Id_1', '2019-12-03 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_8', 'currier_Id_2', '2019-12-07 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_9', 'currier_Id_3', '2019-12-11 12:12:15');
+Insert into Delivery (Order_Id, Currier_Id, Date_Time) values ('Order_Id_10', 'currier_Id_1', '2019-12-15 12:12:15');
+
+
+select * from Delivery;
+
+
+select status from (select o.User_Id, o.Order_Id, py.status from Orders o, Payments py where o.Order_Id = py.Order_Id and o.Order_Id = 'Order_Id_5');
+select User_Id, status, ROW_NUMBER() over (order by (User_Id)) as Final_Status from (select o.User_Id, o.Order_Id, py.status from Orders o, Payments py where o.Order_Id = py.Order_Id and o.Order_Id = 'Order_Id_5');
+
+select select o.User_Id, o.Order_Id, py.status, ROW_NUMBER() over (order by (o.Order_Id)) as ROW_NUMBER from Orders o, Payments py where o.Order_Id = py.Order_Id and o.Order_Id = 'Order_Id_5';
+
+select MAX(ROW_NUMBER) from (select o.User_Id, o.Order_Id, py.status, ROW_NUMBER() over (order by (o.Order_Id)) as ROW_NUMBER from Orders o, Payments py where o.Order_Id = py.Order_Id and o.Order_Id = 'Order_Id_5');
+
+
+select pr.Product_Id, pr.Supplier_Id, pr.Category_Id, pr.Product_Name, pr.Price, pr.Number_of_purchases, pr.Product_Specification from Products pr, Categories cr where cr.category_name = 'category1_name' and pr.Category_Id = cr.Category_Id and pr.supplier_id like 'supply_id_N';
