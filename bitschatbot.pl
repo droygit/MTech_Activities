@@ -1,6 +1,9 @@
 % A simple course advisor system
 % The user interface
 
+:- dynamic continue_menu/1.
+:- dynamic show_degree_info/1.
+
 % Initialization procedures
 start:-
     reconsult('bitstemp.pl'),nl,
@@ -17,39 +20,46 @@ save:-
     told,
     write('Done'),nl.
 
-command(1):-
+command(1,IName):-
     show_all_courses(),
-    continue_menu().
+    continue_menu(IName).
 
-command(2):-
+command(2,IName):-
     write("Please choose one of the following courses - "),nl,
-    show_degree_info(),
-    continue_menu(),
+    show_degree_info(IName),
+    continue_menu(IName),
     nl.
 
-command(3):-
+command(3,IName):-
     write("Not implemented yet."),nl,
-    continue_menu(),
+    continue_menu(IName),
     nl.
 
-command(4):-
+command(4,IName):-
     write("Not implemented yet."),nl,
-    continue_menu(),
+    continue_menu(IName),
     nl.
 
-command(5):-
+command(5,IName):-
     write("Not implemented yet."),nl,
-    continue_menu(),
+    continue_menu(IName),
     nl.
 
-command(6):-
+command(6,IName):-
     write("Not implemented yet."),nl,
-    continue_menu(),
+    continue_menu(IName),
     nl.
 
-command(7):-
-    write("Thanks for showing interest! Talk to you later. Bye!"),
+command(7,IName):-
+    write("Thanks for showing interest! Bye "),
+    write(IName),
+    write("! Talk to you later."),
     nl.
+
+read_name(OString):-
+    current_input(Input),
+    read_line_to_codes(Input, Codes),
+    string_codes(OString, Codes).
 
 general_options:-
     write("Choose one of the follwing number to proceed -"),nl,
@@ -62,17 +72,23 @@ general_options:-
     write("7. Quit"),nl.
 
 
-continue_menu:-
-    write("Hi there. Please select the next topic - "),nl,
+continue_menu(IName):-
+    write("Welcome back "),
+    write(IName),
+    write(" to main menu. Please select the next topic - "),nl,
     general_options(),
     read(Option),
-    command(Option),
+    command(Option,IName),
     nl.
 
 %Displays menu to user
 main_menu:-
-    write("Hi there. I am a chatbot. I can help you regarding follwoing topics - "),nl,
+    write("What is your name? "),nl,
+    read_name(Name),
+    format('Hi ~s',[Name]),
+    write(". I am a chatbot. "),
+    write("I can help you regarding follwoing topics - "),nl,
     general_options(),
     read(Option),
-    command(Option),
+    command(Option,Name),
     nl.

@@ -1,4 +1,5 @@
 :- dynamic guide_course/1.
+:- dynamic suitable_be_course/3.
 
 show_course(IDegreeName,ICourseName):-
     write("\t"),
@@ -15,24 +16,55 @@ undergraduate_courses:-
     show_course("B.E.", "Mechanical Engineering"),
     show_course("B.E.", "Computer Science").
 
-postgraduate_courses:-
-    write("Postgraduate courses are - "),nl,
-    show_course("M.E.", "Chemical (with specialization in Petroleum Engineering)"),
-    show_course("M.E.", "Communication Engineering"),
-    show_course("M.E.", "Embedded Systems"),
-    show_course("M.E.", "Computer Science").
-
 
 show_all_courses:-
     undergraduate_courses(),
-    postgraduate_courses(),
     nl.
 
 subject_name(ISubject):-
     write(ISubject),
     write(": ").
 
-guide_course(1):-
+
+suitable_be_course(IMathMarks1,IPhyMarks2, 2):-
+    (
+    (IMathMarks1 > 70 , IPhyMarks2 > 60) ->
+        show_course("B.E.", "Civil Engineering"),
+        show_course("B.E.", "Mechanical Engineering"),
+        show_course("B.E.", "Computer Science")
+    ).
+
+suitable_be_course(IMathMarks1,IPhyMarks2, 1):-
+    (
+    (IMathMarks1 > 70 , IPhyMarks2 > 70) ->
+        show_course("B.E.", "Civil Engineering"),
+        show_course("B.E.", "Mechanical Engineering"),
+        show_course("B.E.", "Computer Science"),
+        show_course("B.E.", "Electrical and Electronics Engineering")
+    ).
+
+suitable_be_course(IMathMarks1,IPhyMarks2,IChemMarks, 3):-
+    (
+    (IMathMarks1 > 70 , IPhyMarks2 > 60 , IChemMarks > 70) ->
+        show_course("B.E.", "Chemical Engineering")
+    ).
+
+%TODO: Use this function.
+cutoff_marks(IName,ISubject,IMarks,ICuttOff):-
+    (
+    (IMarks < ICuttOff) ->
+        write("Sorry "),
+        write(IName),
+        write("! You could't clear the cut off marks of "),
+        write(ISubject);
+        write("Congratulation "),
+        write(IName),
+        write("! You clear the cut off marks of "),
+        write(ISubject)
+    ),
+    nl.
+
+guide_course(IName):-
     write("Please proved obtained marks in Class XII examination for follwing subjects - "),nl,
     subject_name("Mathematics"),
     read(MathMarks),
@@ -46,48 +78,29 @@ guide_course(1):-
     read(TotalMarks),
 
     ( 
-        (TotalMarks < 60) ->
-        write("Sorry! You are not eligible for any of the courses because Total Marks is less than 60%.");
+    (TotalMarks < 60) ->
+        write("Sorry "),
+        write(IName),
+        write("! You are not eligible for any of the courses because Total Marks is less than 60%.");
         (
         (EngMarks < 50) ->
-            write("Sorry! You are not eligible for any of the courses because English is less than 50%.");
+            write("Sorry "),
+            write(IName),
+            write("! You are not eligible for any of the courses because English is less than 50%.");
+            write(IName),
+            write(", You are eligible for follwoing subjects - "),nl,
             (
-            (MathMarks =< 70) ->
-                write("Sorry! You are not eligible for any of the courses because Mathematics is less than 70%.");
-                (
-                (PhyMarks < 70) ->
-                    write("Sorry! You are not eligible for any of the courses because Physics is less than 60%.");
-                    write("\tSuitable course(s) is/are -"),nl,
-                    (
-                    (PhyMarks >= 70 , PhyMarks < 80) ->
-                        show_course("B.E.", "Mechanical Engineering"),
-                        show_course("B.E.", "Civil Engineering"),
-                        show_course("B.E.", "Computer Science");
-                        show_course("B.E.", "Electrical and Electronics Engineering")
-                    ),
-                    (
-                    (ChemMarks > 70) ->
-                        show_course("B.E.", "Chemical Engineering")
-                    )
-                )
+            (suitable_be_course(MathMarks,PhyMarks,1) ;
+            suitable_be_course(MathMarks,PhyMarks,2) ; 
+            suitable_be_course(MathMarks,PhyMarks, ChemMarks, 3)) ->
+                nl;
+                write("Sorry! You are not eligible for any available courses.")
             )
         )
     ),
-    write("Done!"),
+    %write("Done!"),
     nl.
 
-guide_course(2) :-
-    write("Please provide the following information - "),
-
-    nl.
-
-show_degree_info:-
-    write("1. B.E."),nl,
-    write("2. M.E."),nl,
-    read(Option),
-    (
-        (Option > 2 ; Option < 1) ->
-        write("Error: Incorrect Option. Sorry! Start from beginning.");
-        guide_course(Option)
-    ),
+show_degree_info(IName):-
+    guide_course(IName),
     nl.
