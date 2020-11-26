@@ -88,16 +88,6 @@ command(4,IName):-
         app_status_command(Bitsid,1);
         nl,write("Incorrect option. Please try again.")
     ),
-    %((Option =:= 1) ->
-    %    app_status_command(Bitsid,1);
-    %    ((Option =:= 2) ->
-    %        app_status_command(Bitsid,2);
-    %        ((Option =:= 3) ->
-    %            app_status_command(Bitsid,3);
-    %            nl,write("Incorrect option. Please try again.")
-    %        )
-    %    )
-    %),
     continue_menu(IName),
     nl.
 
