@@ -24,6 +24,9 @@
 #define CURRENT_YEAR 2021
 #define SKIP    continue
 //#define SKIP    printf (">> DEBUG << \t\t\t")
+//#define DEBUG_PRINT printf("\n%d", __LINE__)
+#define DEBUG_PRINT  
+
 
 char MONTH[12][4] = { 
     "Jan\0",
@@ -60,46 +63,58 @@ int main (int argc, char *argv[ ])
 {
     DIR *p_dir;
     struct dirent *p_dirent;
+    char buf [1024];
     struct stat st;
     unsigned int size;
     struct tm dt;
     struct group *gr;
     struct passwd *pwd;
     unsigned long int total_size = 0;
-    FILE *fp;
+    
+    DEBUG_PRINT;
 
-    if (argc != 2)
+    if (argc == 1)
     {
-        //printf("This is a simulation of \"ls -l\" command.\n");
+        p_dir = opendir(".");
+    }
+    else if (argc == 2)
+    {
+        p_dir = opendir(argv[1]);
+    }
+    else
+    {
         printf("usage: lsminusl_command <directory>\n");
         exit(EXIT_FAILURE);
     }
+    DEBUG_PRINT;
 
-    //p_dir = opendir(".");
-    p_dir = opendir(argv[1]);
     if (p_dir == NULL)
     {
         printf("Path doesn't exist!");
         exit(EXIT_FAILURE);
     }
     
+    DEBUG_PRINT;
 
     p_dirent = readdir(p_dir);
 
-    fp = fopen(p_dirent->d_name, "r");
-    fseek(fp, 0, 2);
-    size = ftell(fp);
-    fclose(fp);
+    if (p_dirent == NULL)
+    {
+        printf("Path doesn't exist!");
+        exit(EXIT_FAILURE);
+    }
 
-    printf ("total %u\n", size);
     while(p_dirent != NULL)
     {
+        DEBUG_PRINT;
         // ls -l command doesn't show hidden files.
         // Hence, ignoring those files starting with '.'
         // character.
         if (p_dirent->d_name[0] != '.')
         {
-            stat(p_dirent->d_name, &st);
+            DEBUG_PRINT;
+            sprintf(buf, "%s/%s", argv[1], p_dirent->d_name);
+            stat(buf, &st);
 
             file_permission(st.st_mode);    // File Permission
 
@@ -115,11 +130,11 @@ int main (int argc, char *argv[ ])
             printf("%u\t", size);
 
             dt = *(gmtime(&st.st_mtime));
-            printf ("%s %2d ",
+            printf ("%s %02d ",
                     MONTH[(dt.tm_mon)%12],
                     dt.tm_mday);
             if (dt.tm_year + 1900 == CURRENT_YEAR)
-                printf ("%d:%d", dt.tm_hour, dt.tm_min);
+                printf ("%02d:%02d", dt.tm_hour, dt.tm_min);
             else
                 printf ("%5d", dt.tm_year + 1900);
             printf ("\t");
@@ -129,10 +144,8 @@ int main (int argc, char *argv[ ])
         }
 
         p_dirent = readdir(p_dir);
-        total_size += size;
     }
 
-    printf ("total %lu", total_size/1024);
     printf("\n");
 
     closedir(p_dir);
