@@ -1,3 +1,10 @@
+// This source code will be responsible to run one application as TCP Server
+// or TCP Client. In this code, whatever string TCP Client will send to TCP Server, Server
+// will return same string to TCP Client.
+// Assumption:
+//      1. There will be one client and one server.
+//      2. Message length will be maximum 1500 bytes.
+
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -8,12 +15,11 @@
 
 #define DEBUG_PRINT ;//printf("\n%s:%d", __func__, __LINE__)
 
-#define MAX_STRING_LENGTH 1500
+#define MAX_STRING_LENGTH 1501
 #define BACKLOG 10
 typedef struct sockaddr sock_addr;
 
-#define SERVER_ARGC_COUNT   4   // <app_name> -s -p <SELF_PORT_ID> 
-#define CLIENT_ARGC_COUNT   6   // <app_name> -c -p <SELF_PORT_ID> -t <SELF_PORT_ID>
+#define ARGC_COUNT   4   // <app_name> -s -p <SELF_PORT_ID> OR <app_name> -c -p <SELF_PORT_ID>
 enum process_catagory 
 {
     SERVER = 0,
@@ -215,7 +221,7 @@ enum process_catagory extract_info(int argc, char *argv[],
 {
     enum process_catagory ret = UNKNOWN_CATAGORY;
 
-    if (argc == 4)
+    if (argc == ARGC_COUNT)
     {
         DEBUG_PRINT;
         printf (" %s %s %s", argv[1], argv[2], argv[3]);
