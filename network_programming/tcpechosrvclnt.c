@@ -9,7 +9,7 @@
 #define DEBUG_PRINT ;//printf("\n%s:%d", __func__, __LINE__)
 
 #define MAX_STRING_LENGTH 1500
-#define PORT 8080
+#define BACKLOG 10
 typedef struct sockaddr sock_addr;
 
 #define SERVER_ARGC_COUNT   4   // <app_name> -s -p <SELF_PORT_ID> 
@@ -36,27 +36,30 @@ void server_echo_msg_func(int sockfd)
     char buff[MAX_STRING_LENGTH];
     int n;
 
+    enum boolean is_quit = FALSE;
+
     // infinite loop for echo message
-    while (1) {
+    while (is_quit == FALSE) {
         // Reset memory
         memset(buff, 0, MAX_STRING_LENGTH);
   
         // read the message from client and copy it in buffer
         read(sockfd, buff, sizeof(buff));
+        printf("From client [%s]. ", buff);
         
-        // print buffer which contains the client contents
-        printf("From client: [%s]. Return same message to client.\n", buff);
- 
-        // Return same message to client
-        // and send that buffer to client
-        write(sockfd, buff, sizeof(buff));
-  
         // if msg contains "Quit" then server exit and echo message ended.
-        if (strncmp("quit", buff, 4) == TRUE) {
-            printf("Server Quits.\n");
-            break;
+        if (strncmp("exit", buff, 4) == TRUE) {
+            strcpy(buff, "Server quits! Bye.");
+            is_quit = TRUE;
         }
+
+        // print buffer which contains the client contents
+        printf("Return message to client: [%s]..\n", buff);
+ 
+        // Return message to client.
+        write(sockfd, buff, sizeof(buff));
     }
+    printf("Server Quits.\n");
 }
   
 enum boolean server_main(int port_id)
@@ -89,7 +92,7 @@ enum boolean server_main(int port_id)
         printf("Socket successfully binded..\n");
   
     // Now server is ready to listen and verification
-    if ((listen(sockfd, 5)) != 0) {
+    if ((listen(sockfd, BACKLOG)) != 0) {
         printf("Error! Listen failed.\n");
         exit(0);
     }
@@ -134,18 +137,28 @@ void client_func(int sockfd)
         // newline is considered as end of sentense.
         while ((buff[n++] = getchar()) != '\n');
         
-        write(sockfd, buff, sizeof(buff));
-        
-        memset(buff, 0, sizeof(buff));
-        read(sockfd, buff, sizeof(buff));
-        
-        printf("From Server : %s", buff);
-        
-        if ((strncmp(buff, "exit", 4)) == TRUE) {
+        if ((strncmp(buff, "exit", 4)) == TRUE)
+        {
             printf("Client Exit...\n");
             break;
         }
+        else
+        {
+            write(sockfd, buff, sizeof(buff));
+
+            memset(buff, 0, sizeof(buff));
+            read(sockfd, buff, sizeof(buff));
+
+            printf("From Server : %s", buff);
+        }
     }
+
+    // Requesting Server to quit gracefully.
+    strcpy(buff, "exit");
+    write(sockfd, buff, sizeof(buff));
+    memset(buff, 0, sizeof(buff));
+    read(sockfd, buff, sizeof(buff));
+    printf("From Server : %s", buff);
 }
 
 int client_main(int server_port_id)
