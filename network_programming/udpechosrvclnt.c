@@ -175,9 +175,9 @@ void usage ()
 {
     printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     printf("For starting a server - \n");
-    printf("\t tcp_server_client -s -p <SELF_PORT_ID>\n");
+    printf("\t udp_server_client -s -p <SELF_PORT_ID>\n");
     printf("For starting a client - \n");
-    printf("\t tcp_server_client -c -p <SELF_PORT_ID>");
+    printf("\t udp_server_client -c -p <SELF_PORT_ID>");
     printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 }
 
