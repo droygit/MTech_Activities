@@ -10,12 +10,13 @@
 #include <unistd.h>
 
 #define DEBUG_PRINT printf("\n%s:%d\n", __func__, __LINE__)
-#define ARGC_COUNT  4   // <app_name> -r -n <number of message> OR <app_name> -w -n <number of message>
+#define ARGC_COUNT  2   // <app_name> -r -n <number of message> OR <app_name> -w -n <number of message>
 #define PATH_NAME   "ftok_file_1"
 #define PROJ_ID     50
-#define MAX_LENGTH_MSG  10
+#define MAX_LENGTH_MSG  100
 #define MAX_VALUE   100
 #define SLEEP_TIME  1   // In seconds
+#define NUM_READ_WRITE_OP   50
 
 enum process_catagory 
 {
@@ -50,19 +51,21 @@ void read_process (int num_msg)
 
     while (num_msg >= 0)
     {
+        memset(message.mtext, 0, MAX_LENGTH_MSG*sizeof(char));
         // msgrcv to receive message
         msgrcv(msg_id, &message, sizeof(message), 1, 0);
 
         // display the message
-        printf("Data Received is : %s \n", 
-                message.mtext);
+        printf("Data Received is : %s \n", message.mtext);
 
         sleep (SLEEP_TIME);
+
+        --num_msg;
     }
 
     sleep (10*SLEEP_TIME);
     // delete the message queue
-    msgctl(msg_id, IPC_RMID, NULL);
+     msgctl(msg_id, IPC_RMID, NULL);
 
 }
 
@@ -98,7 +101,7 @@ void write_process(int num_msg)
         msgsnd(msg_id, &message, sizeof(message), 0);
 
         // Show the message
-        printf("Message Data is : [%s] written in message queue. \n", message.mtext);
+        printf("Data send : %s \n", message.mtext);
 
         sleep(SLEEP_TIME);
 
@@ -116,29 +119,24 @@ void usage ()
     printf("\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 }
 
-enum process_catagory extract_info(int argc, char *argv[], int *num_msg)
+enum process_catagory extract_info(int argc, char *argv[])
 {
     enum process_catagory ret = UNKNOWN_CATAGORY;
-    *num_msg = 0;
 
     if (argc == ARGC_COUNT)
     {
         DEBUG_PRINT;
-        printf (" %s %s %s", argv[1], argv[2], argv[3]);
+        //printf (" %s %s %s", argv[1], argv[2], argv[3]);
 
-        if (strcmp(argv[1], "-w") == TRUE &&
-            strcmp(argv[2], "-n"))
+        if (strcmp(argv[1], "-w") == TRUE)
         {
             DEBUG_PRINT;
             ret = WRITER;
-            *num_msg = atoi(argv[3]); 
         }
-        else if (strcmp(argv[1], "-r") == TRUE &&
-                 strcmp(argv[2], "-n"))
+        else if (strcmp(argv[1], "-r") == TRUE)
         {
             DEBUG_PRINT;
             ret = READER;
-            *num_msg = atoi(argv[3]); 
         }
         else 
             ret = INCORRCT_ARGC;
@@ -155,8 +153,8 @@ enum process_catagory extract_info(int argc, char *argv[], int *num_msg)
 int main (int argc, char *argv[])
 {
     enum process_catagory catagory;
-    int num_msg;
-    catagory = extract_info(argc, argv, &num_msg);
+    int num_msg = NUM_READ_WRITE_OP;
+    catagory = extract_info(argc, argv);
     switch (catagory)
     {
         case READER: 
