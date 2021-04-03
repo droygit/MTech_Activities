@@ -5,23 +5,24 @@
 #include <unistd.h>
 #include <time.h>
 
-#define MAX_THREAD  10
+#define MAX_THREAD  5
 #define MAX_SLEEP_TIME 2
+#define DEFAULT_VALUE 999
+
 pthread_t thread_id[MAX_THREAD];
-int data;
+int data = DEFAULT_VALUE;
 pthread_mutex_t mlock;
   
 void* thread_func(void* arg)
 {
     pthread_mutex_lock(&mlock);
-  
-    unsigned long i = 0;
+    // Critical Section
+    printf("\n\n++ Critical section started | thread id %ld ++", pthread_self());
+    printf("\nBefore update data = %d", data);
     data = rand();
-    printf("\n\nThread id %ld has started  | data = %d", pthread_self(), data);
-
+    printf("\nAfter update) data = %d", data);
     sleep(MAX_SLEEP_TIME);
-
-    printf("\nThread id %ld has finished | data = %d", pthread_self(), data);
+    printf("\n++ Critical section finished | thread id %ld ++", pthread_self());
   
     pthread_mutex_unlock(&mlock);
   
@@ -54,7 +55,7 @@ int main(void)
     
     pthread_mutex_destroy(&mlock);
     
-    printf("\n ++++ Program Ends ++++ \n");
+    printf("\n\n ++++ Program Ends ++++ \n");
   
     return 0;
 }
