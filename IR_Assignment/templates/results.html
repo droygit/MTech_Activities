@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+    <link rel="icon" href="http://obj-cache.cloud.ruanbekker.com/favicon.ico">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Song Search</title>
+
+  </head>
+  <body>
+
+  <div class="container">
+    <div style="background:transparent !important" class="jumbotron">
+      <div style="font-family: 'Ubuntu', sans-serif;">
+        <p>
+          <center>
+          <font size="8">Provided some words. We are showing matching lyrics.</font>
+          </center>
+        </p>
+      </div>
+    </div>
+
+  <form action="results" method="post">
+    <div class="input-group">
+      <input type="text" class="form-control input-lg" name="input" placeholder="Search"  autofocus>
+      <div class="input-group-btn">
+        <button class="btn btn-primary btn-lg" type="submit">
+          <i class="glyphicon glyphicon-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+
+
+
+    <h2>Words = {{ words |safe }} </h2>
+    <h2>Number of songs = {{ num |safe }} </h2>
+    <h2>Most relevent Songs</h2>
+    {{ data |safe }}
+  
+ 
+
+
+        <footer class="footer">
+        <p>&copy; Debojyoti Roy (2019ht13192@wilp.bits-pilani.ac.in) </p>
+      </footer>
+
+      </div>
+    </div>
+  </body>
+</html>
