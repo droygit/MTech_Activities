@@ -5,6 +5,7 @@
 """
 import argparse
 from enum import Enum
+from tabulate import tabulate
 import pandas
 
 class eProcesState(Enum):
@@ -26,12 +27,15 @@ kPosToPricessId = 3
 kPosTransactionAmount = 4
 kPosMessageId = 5
 kPosProcessState = 6
-kPosSendWhiteMsgHistory = 7
-kPosRecvWhiteMsgHistory = 8
-kPosTransitMsg = 9
+kPosWhiteMsgHistory = 7
+kPosSnapshot = 8
+#kPosChannelInfo = 8
+#kPosTransitMsg = 9
 
 kTotalNumProcess = 2
 process_id = 0
+
+snapshot = []
 
 column_name = ['Event_Decription', 'Timestamp', 'Pricess_id', 'Process_Id', 'Transaction', 'Message_id']
 all_process_events = [
@@ -60,10 +64,11 @@ all_process_events = [
         [eEvents.SEND_WHITE_MSG, 6.5, 2, 1, 30, 'm21-1'],
         [eEvents.TIME, 5, 2, 0, 190, 'NA'],
         [eEvents.RECEIVE_RED_MSG, 5.5, 1, 2, 10, 'm12-2'],
+        [eEvents.SEND_RED_MSG, 5.6, 2, 1, 0, 'm21-2'],
         [eEvents.TIME, 6, 2, 0, 200, 'NA'],
         [eEvents.RECEIVE_WHITE_MSG, 6.5, 1, 2, 30, 'm12-3'],
         [eEvents.TIME, 7, 2, 0, 230, 'NA'],
-        [eEvents.SEND_WHITE_MSG, 8.5, 2, 1, 20, 'm21-2'],
+        [eEvents.SEND_WHITE_MSG, 8.5, 2, 1, 20, 'm21-3'],
         [eEvents.TIME, 8, 2, 0, 210, 'NA'],
         [eEvents.TIME, 9, 2, 0, 210, 'NA']]
 ]
@@ -71,10 +76,9 @@ all_process_events = [
 def print_input():
     #TODO: Read from file and create 'all_process_events' array
     for process in all_process_events:
-        print ('++++ Process Events ++++')    
+        print ('\n\n++++ Process-{0} Events ++++'.format(process[0][kPosFromPricessId]))
         df = pandas.DataFrame(process, columns=column_name)
-        print (df)
-        print ('+++++++++++++++++++++++++\n')
+        print(tabulate(df, headers = 'keys', tablefmt = 'psql'))
     
 
 def processing_events(process_id):
@@ -88,75 +92,103 @@ def processing_events(process_id):
         transit.append(0)
     
     final_output = []
-    col = column_name
+    isRedMsgSend = True
+    keepHistory = True
+    col = list(column_name)
     col.append('Process_State')
     col.append('White_Msg_History')
-    col.append('Channel_info')
-    col.append('Transit_messages')
+    col.append('Snapshot')
+    col.append('Transit')
     
-    for event in process_events:
-        #print('Debug! Event = ', event)
-        event.append(current_state)
+    event = []
+    
+    for singleEvent in process_events:
+        #print('\n\nDebug! Event = ', event)
+        
+        event = singleEvent[:]
+        event.append(current_state) # Place holder of current state. Will be updated with appropriate value.
+        event.append([])            # Place holder of White message history
+        event.append([])            # Place holder for Snapshot
+        event.append([])            # Place holder for Transit
+
+        if isRedMsgSend == True:
+            current_state = eProcesState.WHITE
+        if keepHistory == False:
+            white_msg_history.clear()
+
+        
         if event[kPosEventDescription] == eEvents.TIME:
-            if len(white_msg_history) == 0:
-                event.append('None')
-            else:
-                event.append(white_msg_history)
-            event.append(channels)
-            event.append(transit)
+            #if len(white_msg_history) == 0:
+            #    event[kPosWhiteMsgHistory] = []
+            #else:
+            #    event[kPosWhiteMsgHistory] = white_msg_history [:]
+            if current_state == eProcesState.RED:
+                event[kPosWhiteMsgHistory] = white_msg_history [:]
+            #event[kPosChannelInfo] = channels[:]
+            #event[kPosTransitMsg] = transit[:]
+            keepHistory = True
         elif event[kPosEventDescription] == eEvents.SEND_WHITE_MSG:
             # Message is sent before taking local snapshot
-            if current_state == eProcesState.WHITE:
-                msg = ['S', event[kPosMessageId], event[kPosToPricessId], event[kPosTransactionAmount]]
-                white_msg_history.append(msg)
+            #if current_state == eProcesState.WHITE:
+            msg = ['S', event[kPosMessageId], event[kPosToPricessId], event[kPosTransactionAmount]]
+            white_msg_history.append(msg)
                 #print('Debug! white_msg_history = ', white_msg_history)
-            event.append(white_msg_history)
-            event.append(channels)
-            event.append(transit)
+            #event[kPosWhiteMsgHistory] = white_msg_history[:]
+            #event[kPosChannelInfo] = channels[:]
+            #event[kPosTransitMsg] = transit[:]
+            keepHistory = True
         elif event[kPosEventDescription] == eEvents.SEND_RED_MSG:
             # Message is sent after taking local snapshot
-            pass
+            isRedMsgSend = True
+            keepHistory  = False
+            event[kPosWhiteMsgHistory] = white_msg_history[:]
+            #event[kPosChannelInfo] = channels[:]
+            #event[kPosTransitMsg] = transit[:]
         elif event[kPosEventDescription] == eEvents.RECEIVE_WHITE_MSG:
             msg = ['R', event[kPosMessageId], event[kPosFromPricessId], event[kPosTransactionAmount]]
             white_msg_history.append(msg)
             #print('Debug! white_msg_history = ', white_msg_history)
-            event.append(white_msg_history)
-            event.append(channels)
-            event.append(transit)
-            pass
+            #event[kPosWhiteMsgHistory] = white_msg_history[:]
+            if current_state == eProcesState.RED:
+                event[kPosWhiteMsgHistory] = white_msg_history [:]
+            #event[kPosChannelInfo] = channels[:]
+            #event[kPosTransitMsg] = transit[:]
+            keepHistory = True
         elif event[kPosEventDescription] == eEvents.RECEIVE_RED_MSG:
             # This process should take its local snapshot
-            if current_state == eProcesState.WHITE:
-                # When 'white' process receives a red message,
-                # it records its local snapshot before processing the message
-                pass
-            pass
+            # When 'white' process receives a red message,
+            # it records its local snapshot before processing the message
+            current_state = eProcesState.RED
+            event[kPosWhiteMsgHistory] = white_msg_history[:]
+            #event[kPosChannelInfo] = channels[:]
+            #event[kPosTransitMsg] = transit[:]
+            keepHistory = True # TODO: Should I clear ?
+            isRedMsgSend = False
         elif event[kPosEventDescription] == eEvents.TAKE_SNAPSHOT:
             # Taking local snapshot
             # At this time, this process turned red
             current_state = eProcesState.RED
-            event[kPosProcessState] = current_state
-            event.append(white_msg_history)
-            event.append(channels)
-            event.append(transit)
-            pass
+            isRedMsgSend = False
+            #event[kPosWhiteMsgHistory] = white_msg_history[:]
+            #event[kPosChannelInfo] = channels[:]
+            #event[kPosTransitMsg] = transit[:]
+            keepHistory = True # Send Red message then clear the history
         else:
             print('Error! Unknown event = ', event[kPosEventDescription])
-            
-        print('\n\nDebug! Append event = ', event)
         
-        final_output.append(event)
-        df = pandas.DataFrame(final_output, columns=col)
-        print (df)
-    
-
+        event[kPosProcessState] = current_state
+        #print('Debug! Append event = ', event)
+        
+        final_output.append(list(event))
+        
+        
+    pandas.set_option('display.max_colwidth', 500)        
     df = pandas.DataFrame(final_output, columns=col)
     print('\n\nFinal Output - ')
-    print (df)
-            
-        
+    print(tabulate(df, headers = 'keys', tablefmt = 'psql'))
+    
+    
 def start_Lai_Yang(process_id):
-    print_input()
     processing_events(process_id)
 
 
@@ -171,6 +203,9 @@ if __name__ == "__main__":
     elif process_id != 1 and process_id != 2:
         print('Error! Process id should be either 1 or 2.')
     else:
-        start_Lai_Yang(process_id)
-    
+        print_input()
+        start_Lai_Yang(1)
+        start_Lai_Yang(2)
+        print_input()
+
     print('---- Program Ends ----')
